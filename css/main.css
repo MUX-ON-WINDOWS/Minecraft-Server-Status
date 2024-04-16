@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: black; 
+    background-image: url('../img/backgroundImage.jpg');    
+    background-repeat: no-repeat;    
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+  }
+
+  .Status_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    padding: 40px;
+    border-radius: 5px;
+    max-width: 80%; /* Limit maximum width */
+    margin: 0 auto; /* Center container horizontally */
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+  #server-status {
+    font-size: 2em;
+  }
+
+  .online {
+    color: green;
+  }
+
+  .offline {
+    color: red;
+  }
+
+  #server-status {
+    font-size: 1.5em;
+    margin-top: 20px; /* Add some space between heading and status */
+  }
+
+  @media only screen and (max-width: 600px) {
+    /* Adjustments for small screens */
+    .Status_container {
+      padding: 20px; /* Reduce padding */
+    }
+
+    h1 {
+      font-size: 1.5em; /* Decrease font size for smaller screens */
+    }
+
+    #server-status {
+      font-size: 1.2em; /* Decrease font size for smaller screens */
+    }
+  }
