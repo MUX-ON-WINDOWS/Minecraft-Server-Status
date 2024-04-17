@@ -37,25 +37,6 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
 
   $stmt->close(); 
   $conn->close(); 
-
-  $server_ip = $_SESSION['server_ip'];
-  $server_port =  $_SESSION['server_port'];
-
-  // Controleer de serverstatus
-  $socket = @fsockopen($server_ip, $server_port, $errno, $errstr, 0.5);
-
-  if ($socket) {
-    fclose($socket);
-    $server_status = "Online";
-  } else {
-    $server_status = "Offline";
-  }
-
-  // JSON-object met serverstatus
-  $data = array(
-    "status" => $server_status
-  );
-
 }
 ?>
 <!DOCTYPE html>
@@ -66,17 +47,69 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
   <title>Minecraft Server Status</title>
   <link rel="stylesheet" href="../css/main.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    $(document).ready(function() {
-      var serverStatus = <?php echo json_encode($data); ?>;
-      if (serverStatus.status === "Online") {
-            $("#server-status").text(serverStatus.status);
-            $("#server-status").addClass("online");
-          } else {
-            $("#server-status").text(serverStatus.status);
-            $("#server-status").removeClass("online");
-          }
-    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    function checkServerStatus() {
+        // Make a GET request to the API endpoint
+        axios.get('https://api.mcstatus.io/v2/status/java/rest-consolidated.gl.joinmc.link')
+            .then(function(response) {
+
+                if (response.data.online === true) {
+                    document.getElementById("server-status").textContent = "Server is online";
+                    document.getElementById("server-status").classList.add("online");
+                } else {
+                    document.getElementById("server-status").textContent = "Server is offline";
+                    document.getElementById("server-status").classList.remove("online");
+                }
+                for(var i = 0; i < 10; i++) {
+                    console.log(response.data.players.list[i])
+
+                    const players = response.data.players.list[i].name_clean;
+                    const image = response.data.players.list[i].uuid;
+                    console.log(players);
+                    displayPlayerList(players, image);
+                }
+            })
+            .catch(function(error) {
+                // Handle error
+                console.error('Error fetching server status:', error);
+            });
+    }
+
+    // Initial check
+    checkServerStatus();
+
+    // setInterval(checkServerStatus, 10000);
+
+    function displayPlayerList(players, image) {
+        // Get the container element for the player list
+        var playerListContainer = document.getElementById("player-list");
+
+        var playerListItem = document.createElement("div");
+        playerListItem.classList.add("player-list-item");
+
+        // Create a new image element for the avatar
+        var imgAvatar = document.createElement("img");
+        imgAvatar.src = "https://crafatar.com/avatars/" + image; // Set the source of the image
+        imgAvatar.alt = players; // Set alt attribute for accessibility
+
+        // Create a text node for the player name
+        var playerNameNode = document.createElement("p");
+        playerNameNode.textContent = players;
+
+        // Append the image and player name to the list item
+        playerListItem.appendChild(imgAvatar);
+        playerListItem.appendChild(playerNameNode);
+
+        // Append the list item to the container
+        playerListContainer.appendChild(playerListItem);
+    }
+});
+
+
+
   </script>
 </head>
 <body>
@@ -94,6 +127,12 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
 
     <h1>Minecraft Server Status</h1>
     <p id="server-status">Server loading...</p>
+    <h1>Minecraft Player List</h1>   
+    <div class="Player_list_container">   
+        <div id="player-list">
+        </div>
+    </div>
+  </div>
   </div>
 </body>
 </html>
