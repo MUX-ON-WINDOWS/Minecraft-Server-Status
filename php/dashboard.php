@@ -18,14 +18,14 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
           ON `minecraftLoginServer`.`server_id` = `MC_Server`.`server_id` 
           WHERE `minecraftLoginServer`.`username` = ?";
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param("s", $user); // Assuming username is a string
+  $stmt->bind_param("s", $user);
   $stmt->execute();
   $result = $stmt->get_result();
 
   // Check if data exists
   if ($result->num_rows > 0) {
       $row = $result->fetch_assoc();
-      // Store server IP and port in session
+      // data naar session zetten
       $_SESSION['url'] = $row['url'];
       $_SESSION['server_id'] = $row['server_id'];
       $_SESSION['server_ip'] = $row['server_ip'];
@@ -35,13 +35,10 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
   }
 
 
-  $stmt->close(); // Close statement
-  $conn->close(); // Close database connection
+  $stmt->close(); 
+  $conn->close(); 
 
-  // IP-adres van je Minecraft-server aanpassen
   $server_ip = $_SESSION['server_ip'];
-
-  // Poort van je Minecraft-server aanpassen
   $server_port =  $_SESSION['server_port'];
 
   // Controleer de serverstatus
