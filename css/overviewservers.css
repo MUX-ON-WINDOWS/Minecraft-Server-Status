@@ -1,0 +1,169 @@
+.dashboardContainer {
+  background-color: #E6E7EB;
+  width: 90%;
+  margin: 0 auto;
+  min-height: 90vh;
+  max-height: 100%;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: left;
+}
+.containerTitleSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container_buttons {
+  display: flex;
+  height: 60px;
+  gap: 20px;
+}
+.addserverButton {
+  width: 150px !important;
+  background-color: #15803D;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.addserverButton:hover {
+  background-color: #1F9D55;
+}
+.addserverButton p {
+  margin: 0;
+  font-size: 16px;
+}
+.addserverButton svg {
+  margin-right: 10px;
+  height: 30px;
+}
+.logoutButton {
+  background-color: #F9FAFC;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 100px;
+}
+.logoutButton p {
+  margin: 0;
+  font-size: 16px;
+}
+.logoutButton svg {
+  /* margin-right: 10px; */
+  height: 30px;
+}
+
+/* CSS for stats */
+.containerOverview {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+}
+
+.containerOverview div {
+  text-align: center;
+  width: 25%; /* Make each item take up full width initially */
+  padding: 10px;
+  background-color: #F9FAFC;
+  border-radius: 10px;
+  margin-bottom: 10px; /* Add some space between items */
+}
+
+.containerItemOverview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+}
+
+.containerItemOverview svg {
+  margin-right: 10px;
+  height: 80px;
+}
+
+.containerItemOverview div {
+  text-align: left;
+  min-height: 110px;
+}
+.HighlighterText {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 0px !important;
+}
+
+.discriptionText {
+  margin-bottom: 0px !important;
+  color: gray;
+}
+
+/* Table CSS */
+table {
+  width: 100%;
+  border-spacing: 0px;          
+  margin-top: 40px;
+}
+table th, td {
+  background-color: #F9FAFC;
+  padding: 5px;
+  border-bottom: 1px solid #E6E7EB;
+}
+table th {
+  text-align:center;
+}
+table td {
+  text-align: center;
+}
+.tableHeaderContainer {
+  padding: 10px;
+  background-color: #F9FAFC;
+}
+.tableDataContainer {
+  background-color: #FFFFFF;
+}
+  
+.onlinedashboardservers{
+  color: #15803D;
+}
+
+@media only screen and (max-width: 600px) {
+  .HighlighterText {
+    font-size: 20px; /* Decrease font size for smaller screens */
+  }
+  .discriptionText {
+    font-size: 12px; /* Decrease font size for smaller screens */
+  }
+  .logoutButton {
+    width: 40px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .containerOverview {
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+  }
+  .textLogout {
+    display: none;
+  }
+  .addserverButton p {
+    display: none;
+  }
+  .addserverButton svg {
+    margin-right: 0;
+  }
+  .addserverButton {
+    width: 60px !important;
+  }
+  .logoutButton {
+    width: 60px;
+  }
+}

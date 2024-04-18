@@ -1,0 +1,43 @@
+.Status_container {
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.Status_container h2 {
+    text-align: center;
+}
+
+.Status_container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.Status_container label {
+    margin-bottom: 5px;
+}
+
+.Status_container input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.Status_container input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.Status_container input[type="submit"] {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.Status_container input[type="submit"]:hover {
+    background-color: #0056b3;
+}

@@ -13,10 +13,10 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
   $user = $_SESSION['username'];
 
   // Fetch data from database
-  $sql = "SELECT * FROM `minecraftLoginServer` 
-          INNER JOIN `MC_Server` 
-          ON `minecraftLoginServer`.`server_id` = `MC_Server`.`server_id` 
-          WHERE `minecraftLoginServer`.`username` = ?";
+  $sql = "SELECT * FROM `minecraftloginserver` 
+          INNER JOIN `mc_server` 
+          ON `minecraftloginserver`.`server_id` = `mc_server`.`server_id` 
+          WHERE `minecraftloginserver`.`username` = ?";
   $stmt = $conn->prepare($sql);
   $stmt->bind_param("s", $user);
   $stmt->execute();
@@ -81,7 +81,7 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     // Initial check
     checkServerStatus();
 
-    // setInterval(checkServerStatus, 10000);
+    setInterval(checkServerStatus, 10000);
 
     function displayPlayerList(players, image) {
         // Get the container element for the player list
@@ -107,9 +107,6 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
         playerListContainer.appendChild(playerListItem);
     }
 });
-
-
-
   </script>
 </head>
 <body>

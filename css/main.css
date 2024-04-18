@@ -83,7 +83,6 @@ body {
     border-radius: 10px;
   }
 
-
   @media only screen and (max-width: 600px) {
     /* Adjustments for small screens */
     .Status_container {
