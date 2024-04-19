@@ -48,34 +48,47 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
 document.addEventListener("DOMContentLoaded", function() {
     function checkServerStatus(serverName, serverIp, serverPort) {
         let url;
-        console.log("Server name:", serverName);
-
-        url = `https://api.mcstatus.io/v2/status/java/${serverName}`;
-
+        if (serverIp && serverPort) {
+            url = `https://api.mcstatus.io/v2/status/${serverIp}/${serverPort}`;
+        } else {
+            url = `https://api.mcstatus.io/v2/status/java/${serverName}`;
+        }
         // Make a GET request to the API endpoint
         axios.get(url)
             .then(function(response) {
                 const playerOnline = response.data.players.online;
                 const serverStatus = response.data.online ? "Online" : "Offline";
                 const serverStatusElement = document.querySelector("#server-status-dashboard");
-                let playerCount = 0;
+                const totalSeverDisplay = document.querySelector("#totalServersDisplay");
+                const totalPlayersDisplay = document.querySelector("#totalPlayersDisplay");
 
+                let playerCount = 0;
+                let serverCount = 1;
+
+                // Set online players count
                 document.querySelectorAll("#playersOnline").forEach(function(element) {
                     element.textContent = playerOnline + "/" + response.data.players.max;
                     playerCount += playerOnline;
                 });
-
-                const totalPlayersDisplay = document.querySelector("#totalPlayersDisplay");
                 if (totalPlayersDisplay) {
                     totalPlayersDisplay.textContent = playerCount.toString();
                 } else {
                     console.error("Element with id 'totalPlayersDisplay' not found.");
                 }
 
+                // Set total servers count
+                if (totalSeverDisplay) {
+                    totalSeverDisplay.textContent = serverCount.toString();
+                } else {
+                    console.error("Element with id 'totalSeverDisplay' not found.");
+                }
+
+
                 document.querySelectorAll("#server-status-dashboard").forEach(function(element) {
 
                     if (response.data.online === true) {
                         element.textContent = "Online";
+                        serverCount ++;
                         element.classList.add("onlinedashboardservers");
                         element.classList.remove("offlinedashboardservers");
                     } else if (response.data.online === false) {
@@ -155,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 0 0-.12-1.03l-2.268-9.64a3.375 3.375 0 0 0-3.285-2.602H7.923a3.375 3.375 0 0 0-3.285 2.602l-2.268 9.64a4.5 4.5 0 0 0-.12 1.03v.228m19.5 0a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3m19.5 0a3 3 0 0 0-3-3H5.25a3 3 0 0 0-3 3m16.5 0h.008v.008h-.008v-.008Zm-3 0h.008v.008h-.008v-.008Z" />
                 </svg>                                 
                 <div>
-                    <p class="HighlighterText"><?php echo $rowCount ?></p><p class="discriptionText">Severs Online</p>
+                    <p class="HighlighterText"><span id="totalServersDisplay">0</span><p class="discriptionText">Severs Online</p>
                 </div>
             </div>
             <div class="containerItemOverview"> 
