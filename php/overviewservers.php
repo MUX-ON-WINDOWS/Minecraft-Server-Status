@@ -1,9 +1,11 @@
 <?php 
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-session_start();
 
 require_once 'connection.php';
+require_once 'popupform.php';
+require_once 'overview.php';
 
 if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     header("Location: ../index.html");
@@ -11,6 +13,7 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
 } else {
     // Fetch data from database
     $user = $_SESSION['username'];
+    $user_id = $_SESSION;
 
     // Fetch data from database
     $sql = "SELECT * FROM `minecraftloginserver` 
@@ -43,96 +46,80 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link rel="stylesheet" type="text/css" href="../css/overviewservers.css">
+    <script src="../js/overviewservers.js"></script>
     <title>Overview Servers</title>
     <script>
 document.addEventListener("DOMContentLoaded", function() {
-    function checkServerStatus(serverName, serverIp, serverPort) {
+    function checkServerStatus(serverName, serverIp, serverPort, index) {
         let url;
         if (serverIp && serverPort) {
             url = `https://api.mcstatus.io/v2/status/${serverIp}/${serverPort}`;
-        } else {
+        } else if (serverName) {
             url = `https://api.mcstatus.io/v2/status/java/${serverName}`;
         }
+        
         // Make a GET request to the API endpoint
         axios.get(url)
             .then(function(response) {
                 const playerOnline = response.data.players.online;
                 const serverStatus = response.data.online ? "Online" : "Offline";
-                const serverStatusElement = document.querySelector("#server-status-dashboard");
-                const totalSeverDisplay = document.querySelector("#totalServersDisplay");
-                const totalPlayersDisplay = document.querySelector("#totalPlayersDisplay");
-
-                let playerCount = 0;
-                let serverCount = 1;
+                const serverStatusElement = document.querySelector(".server-status-dashboard-" + index);
+                const playersOnlineElement = document.querySelector(".playersOnline-" + index);
 
                 // Set online players count
-                document.querySelectorAll("#playersOnline").forEach(function(element) {
-                    element.textContent = playerOnline + "/" + response.data.players.max;
-                    playerCount += playerOnline;
-                });
-                if (totalPlayersDisplay) {
-                    totalPlayersDisplay.textContent = playerCount.toString();
+                if (playersOnlineElement) {
+                    playersOnlineElement.textContent = playerOnline + "/" + response.data.players.max;
                 } else {
-                    console.error("Element with id 'totalPlayersDisplay' not found.");
+                    console.error("Element with class 'playersOnline-" + index + "' not found.");
                 }
 
-                // Set total servers count
-                if (totalSeverDisplay) {
-                    totalSeverDisplay.textContent = serverCount.toString();
-                } else {
-                    console.error("Element with id 'totalSeverDisplay' not found.");
-                }
-
-
-                document.querySelectorAll("#server-status-dashboard").forEach(function(element) {
-
-                    if (response.data.online === true) {
-                        element.textContent = "Online";
-                        serverCount ++;
-                        element.classList.add("onlinedashboardservers");
-                        element.classList.remove("offlinedashboardservers");
-                    } else if (response.data.online === false) {
-                        element.textContent = "Offline";
-                        element.classList.add("offlinedashboardservers");
-                        element.classList.remove("onlinedashboardservers");
+                // Set server status
+                if (serverStatusElement) {
+                    serverStatusElement.textContent = serverStatus;
+                    serverStatusElement.classList.remove("offline");
+                    serverStatusElement.classList.remove("online");
+                    serverStatusElement.classList.add(response.data.online ? "online" : "offline");
+                    if (response.data.online = "online") {
+                        document.getElementById("totalServersDisplay").textContent = parseInt(document.getElementById("totalServersDisplay").textContent) + 1;
+                        document.getElementById("totalPlayersDisplay").textContent = parseInt(document.getElementById("totalPlayersDisplay").textContent) + playerOnline;
                     }
-
-                });
+                } else {
+                    console.error("Element with class 'server-status-dashboard-" + index + "' not found.");
+                }
             })
             .catch(function(error) {
                 // Handle error
-                console.error('Error fetching server status:', error);
-                const serverStatusElement = document.querySelector("#server-status-dashboard");
+                const serverStatusElement = document.querySelector(".server-status-dashboard-" + index);
                 if (serverStatusElement) {
-                    serverStatusElement.textContent = "Error";
-                    serverStatusElement.classList.remove("onlinedashboardservers");
-                    serverStatusElement.classList.remove("offlinedashboardservers");
+                    serverStatusElement.textContent = "Offline";
+                    serverStatusElement.classList.remove("online");
+                    serverStatusElement.classList.add("offline");
                 } else {
-                    console.error("Element with id 'server-status-dashboard' not found.");
+                    console.error("Element with class 'server-status-dashboard-" + index + "' not found.");
                 }
             });
     }
 
     // Call checkServerStatus for each server
-    <?php foreach ($rows as $row) : ?>
-        checkServerStatus(<?php echo json_encode($row['url']); ?>, <?php echo json_encode($row['server_ip']); ?>, <?php echo json_encode($row['server_port']); ?>);
+    <?php foreach ($rows as $index => $row) : ?>
+        checkServerStatus(<?php echo json_encode($row['url']); ?>, <?php echo json_encode($row['server_ip']); ?>, <?php echo json_encode($row['server_port']); ?>, <?php echo $index; ?>);
     <?php endforeach; ?>
 });
 
     </script>
     <style> 
     .overview_button {
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-.overview_button:hover {
-    background-color: #0056b3;
-}
+    .overview_button:hover {
+        background-color: #0056b3;
+    }
 </style>
 </head>
 <body>
@@ -140,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <div class="containerTitleSection">
             <h1>Server Overview</h1>
             <div class="container_buttons">
-                <button class="addserverButton" type="button" onclick="">
+                <button class="addserverButton" type="button" onclick="addServer()">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
@@ -168,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 0 0-.12-1.03l-2.268-9.64a3.375 3.375 0 0 0-3.285-2.602H7.923a3.375 3.375 0 0 0-3.285 2.602l-2.268 9.64a4.5 4.5 0 0 0-.12 1.03v.228m19.5 0a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3m19.5 0a3 3 0 0 0-3-3H5.25a3 3 0 0 0-3 3m16.5 0h.008v.008h-.008v-.008Zm-3 0h.008v.008h-.008v-.008Z" />
                 </svg>                                 
                 <div>
-                    <p class="HighlighterText"><span id="totalServersDisplay">0</span><p class="discriptionText">Severs Online</p>
+                    <p class="HighlighterText"><span id="totalServersDisplay">0</span><p class="discriptionText">Servers Online</p>
                 </div>
             </div>
             <div class="containerItemOverview"> 
@@ -189,34 +176,38 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </div>
         <div style="overflow-x: auto;">
-        <table>
-            <tr class="tableHeaderContainer">
-                <th>Server Name</th>
-                <th>Server IP</th>
-                <th>Server Port</th>
-                <th>Server URL</th>
-                <th>Server Status</th>
-                <th>Players</th>
-                <th>Overview</th>
-            </tr>
-            <?php
-            if (isset($rows)) {
-                foreach ($rows as $row) {
-                    echo '<tr class="tableDataContainer">';
-                    echo '<td>' . $row['server_name'] . '</td>';
-                    echo '<td>' . ($row['server_ip'] ?? 'No server IP') . '</td>';
-                    echo '<td>' . ($row['server_port'] ?? 'No server port') . '</td>';
-                    echo '<td>' . $row['url'] . '</td>';
-                    echo '<td id="server-status-dashboard">Server loading...</td>';
-                    echo '<td id="playersOnline"></td>';
-                    echo '<td><button class="overview_button" type="submit" onclick="window.location.href=\'../php/dashboard.php\'">Overview</button></td>';
-                    echo '</tr>';
+            <table>
+                <tr class="tableHeaderContainer">
+                    <th>Server Name</th>
+                    <th>Server IP</th>
+                    <th>Server Port</th>
+                    <th>Server URL</th>
+                    <th>Server Status</th>
+                    <th>Players</th>
+                    <th>Overview</th>
+                </tr>
+                <?php
+                if (isset($rows)) {
+                    foreach ($rows as $index => $row) {
+                        $serverUrl = $row['url'];
+                        $serverIp = $row['server_ip'];
+                        $serverPort = $row['server_port'];
+
+                        echo '<tr class="tableDataContainer">';
+                        echo '<td>' . $row['server_name'] . '</td>';
+                        echo '<td>' . ($row['server_ip'] ?? 'No server IP') . '</td>';
+                        echo '<td>' . ($row['server_port'] ?? 'No server port') . '</td>';
+                        echo '<td>' . $row['url'] . '</td>';
+                        echo '<td class="server-status-dashboard-' . $index . ' "></td>';
+                        echo '<td class="playersOnline-' . $index . '"></td>';
+                        echo '<td><button class="overview_button" type="submit" onclick="overviewServer(\'' . $serverUrl . '\', \'' . $serverIp . '\', \'' . $serverPort . '\')">Overview</button></td>';
+                        echo '</tr>';
+                    }
+                } else {
+                    echo "<tr><td colspan='6'>No servers found for user: $user</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='6'>No servers found for user: $user</td></tr>";
-            }
-            ?>
-        </table>
+                ?>
+            </table>
         </div>
     </div>
 </body>

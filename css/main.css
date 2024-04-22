@@ -7,7 +7,18 @@ body {
     margin: 0; /* Remove default margin */
     padding: 0; /* Remove default padding */
   }
+  .overview_button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
 
+    .overview_button:hover {
+        background-color: #0056b3;
+    }
   .Status_container {
     min-width: 380px;
     position: absolute;
@@ -30,14 +41,14 @@ body {
   }
 
   .online {
-    color: white;
-    background-color: #15803D;
+    font-size: large;
+    color: #15803D;
     padding: 10px;
   }
 
   .offline {
-    color: white;
-    background-color: red;
+    font-size: large;
+    color: red;
     padding: 10px;
   }
 
