@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 require_once 'connection.php';
 require_once 'popupform.php';
 require_once 'overview.php';
+require_once 'deleteserver.php';
 
 if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     header("Location: ../index.html");
@@ -30,7 +31,6 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
         $rows = $result->fetch_all(MYSQLI_ASSOC);
         $rowCount = count($rows);
     } else {
-        echo "No servers found for user: $user";
         $rowCount = 0;
     }
 
@@ -50,17 +50,6 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     <script src="../js/overviewservers.js"></script>
     <title>Overview Servers</title>
     <script>
-        function deleteServer(serverName, serverUrl, serverIp, serverPort) {
-            // Send AJAX request to call the PHP function
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    console.log(this.responseText);
-                }
-            };
-            xhttp.open("GET", "deleteserver.php?serverName=" + serverName + "&serverUrl=" + serverUrl + "&serverIp=" + serverIp + "&serverPort=" + serverPort, true);
-            xhttp.send();
-        }
         document.addEventListener("DOMContentLoaded", function() {
             function checkServerStatus(serverName, serverIp, serverPort, index) {
                 let url;
@@ -213,7 +202,7 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
                         echo '</tr>';
                     }
                 } else {
-                    echo "<tr><td colspan='6'>No servers</td></tr>";
+                    echo "<tr><td colspan='8'>You have no servers</td></tr>";
                 }
                 ?>
             </table>

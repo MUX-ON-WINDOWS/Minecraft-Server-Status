@@ -11,10 +11,12 @@ if (session_status() == PHP_SESSION_NONE) {
 if(isset($_SESSION['username'])) {
     $user = $_SESSION['username'];
 
-    $sql = "SELECT * FROM `minecraftloginserver` 
-    INNER JOIN `mc_server` 
-    ON `minecraftloginserver`.`server_id_user` = `mc_server`.`user_id` 
-    WHERE `minecraftloginserver`.`username` = ?";
+    $sql = "SELECT * FROM `minecraftloginserver` WHERE `server_id_user` AND `username` = ?";
+
+    // $sql = "SELECT * FROM `minecraftloginserver` 
+    // INNER JOIN `mc_server` 
+    // ON `minecraftloginserver`.`server_id_user` = `mc_server`.`user_id` 
+    // WHERE `minecraftloginserver`.`username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $user);
     $stmt->execute();
@@ -25,10 +27,8 @@ if(isset($_SESSION['username'])) {
         $row = $result->fetch_assoc();
         $_SESSION['server_id_user'] = $row['server_id_user'];
         $id = $_SESSION['server_id_user'];
-    } else {
-        echo "No servers found for user: $user";
-    }
-
+    } 
+    
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $server_name = $_POST['server_name'];
         $server_ip = $_POST['server_ip'];
@@ -89,7 +89,7 @@ if(isset($_SESSION['username'])) {
             <label for="server_url">Server URL:</label><br>
             <input type="text" id="server_url" name="server_url"><br><br>
             
-            <input type="submit" value="Add server">
+            <input class="submitButton" type="submit" value="Add server">
         </form>
     </div>
 </body>
