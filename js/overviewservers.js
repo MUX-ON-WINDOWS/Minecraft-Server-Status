@@ -1,7 +1,6 @@
 function addServer() {
     const showPopUp = document.getElementById("containerPopUp");
     showPopUp.style.display = "block";
-    console.log("addServer");
 }
 
 function overviewServer(serverUrl, serverIp, serverPort) {

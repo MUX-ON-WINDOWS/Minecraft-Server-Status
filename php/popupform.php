@@ -4,13 +4,16 @@ ini_set('display_errors', 1);
 
 require_once 'connection.php';
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 if(isset($_SESSION['username'])) {
-    
     $user = $_SESSION['username'];
 
     $sql = "SELECT * FROM `minecraftloginserver` 
     INNER JOIN `mc_server` 
-    ON `minecraftloginserver`.`server_id` = `mc_server`.`server_id` 
+    ON `minecraftloginserver`.`server_id_user` = `mc_server`.`user_id` 
     WHERE `minecraftloginserver`.`username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $user);
@@ -20,8 +23,8 @@ if(isset($_SESSION['username'])) {
     // Check if data exists
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $_SESSION['user_id'] = $row['user_id'];
-        $id = $_SESSION['user_id'];
+        $_SESSION['server_id_user'] = $row['server_id_user'];
+        $id = $_SESSION['server_id_user'];
     } else {
         echo "No servers found for user: $user";
     }
@@ -32,33 +35,38 @@ if(isset($_SESSION['username'])) {
         $server_port = $_POST['server_port'];
         $server_url = $_POST['server_url'];
 
-        // Prepare and bind SQL statement to prevent SQL injection
-        $sql = "INSERT INTO mc_server (server_name, server_ip, server_port, url, user_id) VALUES (?, ?, ?, ?, ?)";
+        // Check if user_id is set
+        if(isset($_SESSION['server_id_user'])) {
+            // Prepare and bind SQL statement to prevent SQL injection
+            $id = $_SESSION['server_id_user'];
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssi", $server_name, $server_ip, $server_port, $server_url, $id);
+            $sql = "INSERT INTO mc_server (server_name, server_ip, server_port, url, user_id) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssi", $server_name, $server_ip, $server_port, $server_url, $id);
 
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Success popup message function. Redirect to overview page
-            
-            header("location: overviewservers.php");
+            // Execute the statement
+            if ($stmt->execute()) {
+                // TODO Success popup message function. Redirect to overview page
+                
+                header("location: overviewservers.php");
+                exit();
+            } else {
+                // Failed popup message function. Redirect to overview page
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+
+            // Close statement and connection
+            $stmt->close();
         } else {
-            // Failed popup message function. Redirect to overview page
-
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "User ID not found.";
         }
-
-        // Close statement and connection
-        $stmt->close();
-        $conn->close();
     }
 } else {
     header("location: ../index.html");
     exit;
 }
-
 ?>
+
 
 <body>
     <div id="containerPopUp">
@@ -69,7 +77,6 @@ if(isset($_SESSION['username'])) {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>  
             </a>
-
             <label for="server_name">Server Name:</label><br>
             <input type="text" id="server_name" name="server_name"><br><br>
             

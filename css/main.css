@@ -1,110 +1,124 @@
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: black; 
-    background-image: url('../img/backgroundImage.jpg');    
-    background-repeat: no-repeat;    
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-  }
-  .overview_button {
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    }
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: black;
+  background-image: url('../img/backgroundImage.jpg');
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+}
 
-    .overview_button:hover {
-        background-color: #0056b3;
-    }
+.overview_button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.overview_button:hover {
+  background-color: #0056b3;
+}
+
+.Status_container {
+  min-width: 380px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #E5E5E5;
+  color: black;
+  padding: 40px;
+  border-radius: 5px;
+  max-width: 80%;
+  /* Limit maximum width */
+  margin: 0 auto;
+  /* Center container horizontally */
+}
+
+h1 {
+  font-size: 2em;
+}
+
+#server-status {
+  font-size: 2em;
+}
+
+.online {
+  font-size: large;
+  color: #15803D;
+  padding: 10px;
+}
+
+.offline {
+  font-size: large;
+  color: red;
+  padding: 10px;
+}
+
+#server-status {
+  font-size: 1.5em;
+  margin-top: 20px;
+  /* Add some space between heading and status */
+}
+
+.Player_list_container {
+  height: 200px;
+  overflow: scroll;
+  max-height: 350px;
+  overflow-x: hidden;
+}
+
+.player-list-item {
+  padding: 10px;
+  display: flex;
+  background-color: #C3C3C3;
+  text-align: center;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.player-list-item img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.player-list-item h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+
+  /* Adjustments for small screens */
   .Status_container {
-    min-width: 380px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #E5E5E5;
-    color: black;
-    padding: 40px;
-    border-radius: 5px;
-    max-width: 80%; /* Limit maximum width */
-    margin: 0 auto; /* Center container horizontally */
+    padding: 20px;
+    /* Reduce padding */
   }
 
   h1 {
-    font-size: 2em;
-  }
-  #server-status {
-    font-size: 2em;
-  }
-
-  .online {
-    font-size: large;
-    color: #15803D;
-    padding: 10px;
-  }
-
-  .offline {
-    font-size: large;
-    color: red;
-    padding: 10px;
+    font-size: 1.5em;
+    /* Decrease font size for smaller screens */
   }
 
   #server-status {
-    font-size: 1.5em;
-    margin-top: 20px; /* Add some space between heading and status */
+    font-size: 1.2em;
+    /* Decrease font size for smaller screens */
   }
-  .Player_list_container {
-    height: 200px;
-    overflow:scroll;
-    max-height: 350px;
-    overflow-x:hidden;
-  }
-  .player-list-item {
-    padding: 10px;
-    display: flex;
-    background-color: #C3C3C3;
-    text-align: center;
-    margin-top: 10px;
-    border-radius: 5px;
-  }
-  .player-list-item img {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-  }
-  .player-list-item h2 {
-    margin: 0;
-    font-size: 1.5em;
-  }
-
-  ::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
-    border-radius: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: gray; 
-    border-radius: 10px;
-  }
-
-  @media only screen and (max-width: 600px) {
-    /* Adjustments for small screens */
-    .Status_container {
-      padding: 20px; /* Reduce padding */
-    }
-
-    h1 {
-      font-size: 1.5em; /* Decrease font size for smaller screens */
-    }
-
-    #server-status {
-      font-size: 1.2em; /* Decrease font size for smaller screens */
-    }
-  }
+}

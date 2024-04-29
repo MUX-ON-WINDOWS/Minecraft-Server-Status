@@ -3,22 +3,25 @@
   width: 90%;
   margin: 0 auto;
   min-height: 90vh;
-  max-height: 100%;
+  max-height: 200vh;
   border-radius: 10px;
   padding: 20px;
   margin-top: 20px;
   text-align: left;
 }
+
 .containerTitleSection {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .container_buttons {
   display: flex;
   height: 60px;
   gap: 20px;
 }
+
 .addserverButton {
   width: 150px !important;
   background-color: #15803D;
@@ -31,17 +34,21 @@
   align-items: center;
   cursor: pointer;
 }
+
 .addserverButton:hover {
   background-color: #1F9D55;
 }
+
 .addserverButton p {
   margin: 0;
   font-size: 16px;
 }
+
 .addserverButton svg {
   margin-right: 10px;
   height: 30px;
 }
+
 .logoutButton {
   background-color: #F9FAFC;
   border: none;
@@ -53,10 +60,12 @@
   cursor: pointer;
   width: 100px;
 }
+
 .logoutButton p {
   margin: 0;
   font-size: 16px;
 }
+
 .logoutButton svg {
   /* margin-right: 10px; */
   height: 30px;
@@ -72,11 +81,13 @@
 
 .containerOverview div {
   text-align: center;
-  width: 25%; /* Make each item take up full width initially */
+  width: 25%;
+  /* Make each item take up full width initially */
   padding: 10px;
   background-color: #F9FAFC;
   border-radius: 10px;
-  margin-bottom: 10px; /* Add some space between items */
+  margin-bottom: 10px;
+  /* Add some space between items */
 }
 
 .containerItemOverview {
@@ -95,6 +106,7 @@
   text-align: left;
   min-height: 110px;
 }
+
 .HighlighterText {
   font-size: 30px;
   font-weight: bold;
@@ -109,39 +121,80 @@
 /* Table CSS */
 table {
   width: 100%;
-  border-spacing: 0px;          
+  border-spacing: 0px;
   margin-top: 40px;
 }
-table th, td {
+
+table th,
+td {
   background-color: #F9FAFC;
   padding: 5px;
   border-bottom: 1px solid #E6E7EB;
 }
+
 table th {
-  text-align:center;
+  text-align: center;
 }
+
 table td {
   text-align: center;
 }
+
 .tableHeaderContainer {
   padding: 10px;
   background-color: #F9FAFC;
 }
+
 .tableDataContainer {
   background-color: #FFFFFF;
 }
-  
-.onlinedashboardservers{
+
+.onlinedashboardservers {
   color: #15803D;
 }
 
+.overview_button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.overview_button:hover {
+  background-color: #0056b3;
+}
+
+.delete_button {
+  background-color: #d30505;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.delete_button:hover {
+  background-color: #FF3333;
+}
+
+.delete_button svg {
+  height: 25px;
+}
+
+/* Media Queries */
 @media only screen and (max-width: 600px) {
   .HighlighterText {
-    font-size: 20px; /* Decrease font size for smaller screens */
+    font-size: 20px;
+    /* Decrease font size for smaller screens */
   }
+
   .discriptionText {
-    font-size: 12px; /* Decrease font size for smaller screens */
+    font-size: 12px;
+    /* Decrease font size for smaller screens */
   }
+
   .logoutButton {
     width: 40px;
   }
@@ -149,20 +202,26 @@ table td {
 
 @media screen and (max-width: 1000px) {
   .containerOverview {
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    flex-wrap: wrap;
+    /* Allow items to wrap to the next line */
   }
+
   .textLogout {
     display: none;
   }
+
   .addserverButton p {
     display: none;
   }
+
   .addserverButton svg {
     margin-right: 0;
   }
+
   .addserverButton {
     width: 60px !important;
   }
+
   .logoutButton {
     width: 60px;
   }

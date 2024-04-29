@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -18,7 +18,7 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     // Fetch data from database
     $sql = "SELECT * FROM `minecraftloginserver` 
             INNER JOIN `mc_server` 
-            ON `minecraftloginserver`.`server_id` = `mc_server`.`user_id` 
+            ON `minecraftloginserver`.`server_id_user` = `mc_server`.`user_id` 
             WHERE `minecraftloginserver`.`username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $user);
@@ -34,14 +34,15 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
         $rowCount = 0;
     }
 
-    $stmt->close(); 
-    $conn->close(); 
+    $stmt->close();
+    $conn->close();
 }
 
 ?>
 
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/main.css">
@@ -49,79 +50,79 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     <script src="../js/overviewservers.js"></script>
     <title>Overview Servers</title>
     <script>
-document.addEventListener("DOMContentLoaded", function() {
-    function checkServerStatus(serverName, serverIp, serverPort, index) {
-        let url;
-        if (serverIp && serverPort) {
-            url = `https://api.mcstatus.io/v2/status/${serverIp}/${serverPort}`;
-        } else if (serverName) {
-            url = `https://api.mcstatus.io/v2/status/java/${serverName}`;
+        function deleteServer(serverName, serverUrl, serverIp, serverPort) {
+            // Your delete logic here
+            console.log('Delete server:', serverName, serverUrl, serverIp, serverPort);
+
+            // Send AJAX request to call the PHP function
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                }
+            };
+            xhttp.open("GET", "delete_server.php?serverName=" + serverName + "&serverUrl=" + serverUrl + "&serverIp=" + serverIp + "&serverPort=" + serverPort, true);
+            xhttp.send();
         }
-        
-        // Make a GET request to the API endpoint
-        axios.get(url)
-            .then(function(response) {
-                const playerOnline = response.data.players.online;
-                const serverStatus = response.data.online ? "Online" : "Offline";
-                const serverStatusElement = document.querySelector(".server-status-dashboard-" + index);
-                const playersOnlineElement = document.querySelector(".playersOnline-" + index);
-
-                // Set online players count
-                if (playersOnlineElement) {
-                    playersOnlineElement.textContent = playerOnline + "/" + response.data.players.max;
-                } else {
-                    console.error("Element with class 'playersOnline-" + index + "' not found.");
+        document.addEventListener("DOMContentLoaded", function() {
+            function checkServerStatus(serverName, serverIp, serverPort, index) {
+                let url;
+                if (serverIp && serverPort) {
+                    url = `https://api.mcstatus.io/v2/status/${serverIp}/${serverPort}`;
+                } else if (serverName) {
+                    url = `https://api.mcstatus.io/v2/status/java/${serverName}`;
                 }
 
-                // Set server status
-                if (serverStatusElement) {
-                    serverStatusElement.textContent = serverStatus;
-                    serverStatusElement.classList.remove("offline");
-                    serverStatusElement.classList.remove("online");
-                    serverStatusElement.classList.add(response.data.online ? "online" : "offline");
-                    if (response.data.online = "online") {
-                        document.getElementById("totalServersDisplay").textContent = parseInt(document.getElementById("totalServersDisplay").textContent) + 1;
-                        document.getElementById("totalPlayersDisplay").textContent = parseInt(document.getElementById("totalPlayersDisplay").textContent) + playerOnline;
-                    }
-                } else {
-                    console.error("Element with class 'server-status-dashboard-" + index + "' not found.");
-                }
-            })
-            .catch(function(error) {
-                // Handle error
-                const serverStatusElement = document.querySelector(".server-status-dashboard-" + index);
-                if (serverStatusElement) {
-                    serverStatusElement.textContent = "Offline";
-                    serverStatusElement.classList.remove("online");
-                    serverStatusElement.classList.add("offline");
-                } else {
-                    console.error("Element with class 'server-status-dashboard-" + index + "' not found.");
-                }
-            });
-    }
+                // Make a GET request to the API endpoint
+                axios.get(url)
+                    .then(function(response) {
+                        const playerOnline = response.data.players.online;
+                        const serverStatus = response.data.online ? "Online" : "Offline";
+                        const serverStatusElement = document.querySelector(".server-status-dashboard-" + index);
+                        const playersOnlineElement = document.querySelector(".playersOnline-" + index);
 
-    // Call checkServerStatus for each server
-    <?php foreach ($rows as $index => $row) : ?>
-        checkServerStatus(<?php echo json_encode($row['url']); ?>, <?php echo json_encode($row['server_ip']); ?>, <?php echo json_encode($row['server_port']); ?>, <?php echo $index; ?>);
-    <?php endforeach; ?>
-});
+                        // Set online players count
+                        if (playersOnlineElement) {
+                            playersOnlineElement.textContent = playerOnline + "/" + response.data.players.max;
+                        } else {
+                            console.error("Element with class 'playersOnline-" + index + "' not found.");
+                        }
 
+                        // Set server status
+                        if (serverStatusElement) {
+                            serverStatusElement.textContent = serverStatus;
+                            serverStatusElement.classList.remove("offline");
+                            serverStatusElement.classList.remove("online");
+                            serverStatusElement.classList.add(response.data.online ? "online" : "offline");
+                            if (response.data.online = "online") {
+                                document.getElementById("totalServersDisplay").textContent = parseInt(document.getElementById("totalServersDisplay").textContent) + 1;
+                                document.getElementById("totalPlayersDisplay").textContent = parseInt(document.getElementById("totalPlayersDisplay").textContent) + playerOnline;
+                            }
+                        } else {
+                            console.error("Element with class 'server-status-dashboard-" + index + "' not found.");
+                        }
+                    })
+                    .catch(function(error) {
+                        // Handle error
+                        const serverStatusElement = document.querySelector(".server-status-dashboard-" + index);
+                        if (serverStatusElement) {
+                            serverStatusElement.textContent = "Offline";
+                            serverStatusElement.classList.remove("online");
+                            serverStatusElement.classList.add("offline");
+                        } else {
+                            console.error("Element with class 'server-status-dashboard-" + index + "' not found.");
+                        }
+                    });
+            }
+
+            // Call checkServerStatus for each server
+            <?php foreach ($rows as $index => $row) : ?>
+                checkServerStatus(<?php echo json_encode($row['url']); ?>, <?php echo json_encode($row['server_ip']); ?>, <?php echo json_encode($row['server_port']); ?>, <?php echo $index; ?>);
+            <?php endforeach; ?>
+        });
     </script>
-    <style> 
-    .overview_button {
-        padding: 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .overview_button:hover {
-        background-color: #0056b3;
-    }
-</style>
 </head>
+
 <body>
     <div class="dashboardContainer">
         <div class="containerTitleSection">
@@ -136,42 +137,46 @@ document.addEventListener("DOMContentLoaded", function() {
                 <button class="logoutButton" type="button" onclick="window.location.href='../php/logout.php'">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-                    </svg> 
+                    </svg>
                     <p class="textLogout">Logout</p>
                 </button>
             </div>
         </div>
         <div class="containerOverview">
-            <div class="containerItemOverview"> 
+            <div class="containerItemOverview">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                </svg>                  
+                </svg>
                 <div>
-                    <p class="HighlighterText"><span id="totalPlayersDisplay">0</span></p><p class="discriptionText">Players Online</p>
+                    <p class="HighlighterText"><span id="totalPlayersDisplay">0</span></p>
+                    <p class="discriptionText">Players Online</p>
                 </div>
             </div>
-            <div class="containerItemOverview"> 
+            <div class="containerItemOverview">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 0 0-.12-1.03l-2.268-9.64a3.375 3.375 0 0 0-3.285-2.602H7.923a3.375 3.375 0 0 0-3.285 2.602l-2.268 9.64a4.5 4.5 0 0 0-.12 1.03v.228m19.5 0a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3m19.5 0a3 3 0 0 0-3-3H5.25a3 3 0 0 0-3 3m16.5 0h.008v.008h-.008v-.008Zm-3 0h.008v.008h-.008v-.008Z" />
-                </svg>                                 
+                </svg>
                 <div>
-                    <p class="HighlighterText"><span id="totalServersDisplay">0</span><p class="discriptionText">Servers Online</p>
+                    <p class="HighlighterText"><span id="totalServersDisplay">0</span>
+                    <p class="discriptionText">Servers Online</p>
                 </div>
             </div>
-            <div class="containerItemOverview"> 
+            <div class="containerItemOverview">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
-                </svg>                                  
+                </svg>
                 <div>
-                    <p class="HighlighterText">0</p><p class="discriptionText">?</p>
+                    <p class="HighlighterText">0</p>
+                    <p class="discriptionText">?</p>
                 </div>
             </div>
-            <div class="containerItemOverview"> 
+            <div class="containerItemOverview">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
-                </svg>                                  
+                </svg>
                 <div>
-                    <p class="HighlighterText">0</p><p class="discriptionText">?</p>
+                    <p class="HighlighterText">0</p>
+                    <p class="discriptionText">?</p>
                 </div>
             </div>
         </div>
@@ -184,11 +189,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     <th>Server URL</th>
                     <th>Server Status</th>
                     <th>Players</th>
-                    <th>Overview</th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 <?php
                 if (isset($rows)) {
                     foreach ($rows as $index => $row) {
+                        $serverName = $row['server_name'];
                         $serverUrl = $row['url'];
                         $serverIp = $row['server_ip'];
                         $serverPort = $row['server_port'];
@@ -201,14 +208,20 @@ document.addEventListener("DOMContentLoaded", function() {
                         echo '<td class="server-status-dashboard-' . $index . ' "></td>';
                         echo '<td class="playersOnline-' . $index . '"></td>';
                         echo '<td><button class="overview_button" type="submit" onclick="overviewServer(\'' . $serverUrl . '\', \'' . $serverIp . '\', \'' . $serverPort . '\')">Overview</button></td>';
+                        echo '<td><button class="delete_button" type="submit" onclick="deleteServer(\'' . $serverName . '\',\'' . $serverUrl . '\', \'' . $serverIp . '\', \'' . $serverPort . '\')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                        </button></td>';
                         echo '</tr>';
                     }
                 } else {
-                    echo "<tr><td colspan='6'>No servers found for user: $user</td></tr>";
+                    echo "<tr><td colspan='6'>No servers</td></tr>";
                 }
                 ?>
             </table>
         </div>
     </div>
 </body>
+
 </html>
