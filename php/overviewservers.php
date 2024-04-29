@@ -51,9 +51,6 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
     <title>Overview Servers</title>
     <script>
         function deleteServer(serverName, serverUrl, serverIp, serverPort) {
-            // Your delete logic here
-            console.log('Delete server:', serverName, serverUrl, serverIp, serverPort);
-
             // Send AJAX request to call the PHP function
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -61,7 +58,7 @@ if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
                     console.log(this.responseText);
                 }
             };
-            xhttp.open("GET", "delete_server.php?serverName=" + serverName + "&serverUrl=" + serverUrl + "&serverIp=" + serverIp + "&serverPort=" + serverPort, true);
+            xhttp.open("GET", "deleteserver.php?serverName=" + serverName + "&serverUrl=" + serverUrl + "&serverIp=" + serverIp + "&serverPort=" + serverPort, true);
             xhttp.send();
         }
         document.addEventListener("DOMContentLoaded", function() {

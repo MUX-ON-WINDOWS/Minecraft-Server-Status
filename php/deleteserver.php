@@ -1,6 +1,6 @@
 <?php
 // delete_server.php
-if(isset($_GET['serverName']) && isset($_GET['serverUrl']) && isset($_GET['serverIp']) && isset($_GET['serverPort'])) {
+if (isset($_GET['serverName']) && isset($_GET['serverUrl']) && isset($_GET['serverIp']) && isset($_GET['serverPort'])) {
     $serverName = $_GET['serverName'];
     $serverUrl = $_GET['serverUrl'];
     $serverIp = $_GET['serverIp'];
@@ -20,6 +20,5 @@ function deleteServerPHP($serverName, $serverIp, $serverPort, $serverUrl)
 
     $stmt->close();
     $conn->close();
-    header("Refresh:0");
+    header("location: overviewservers.php");
 }
-?>
