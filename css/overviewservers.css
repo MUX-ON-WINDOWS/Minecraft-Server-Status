@@ -166,6 +166,34 @@ table td {
   background-color: #0056b3;
 }
 
+/* Popup container */
+#containerPopUpDelete {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none; /* Change this to display: flex; to show the popup */
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form inside the popup */
+#containerPopUpDelete form {
+  background-color: white;
+  width: 400px;
+  max-height: 90%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Delete button */
 .delete_button {
   background-color: #d30505;
   color: white;
@@ -183,21 +211,22 @@ table td {
   height: 25px;
 }
 
+/* Container for buttons */
 .containerButtonsDelete {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
+/* Cancel button */
 .cancelButton {
   background-color: #ccc;
-  width: 100%;
+  flex: 1;
   border: none;
   color: #000;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
   margin-right: 10px;
   cursor: pointer;
@@ -208,35 +237,22 @@ table td {
   background-color: #aaa;
 }
 
+/* Confirm delete button */
 .confirmDelete {
   background-color: #d30505;
-  width: 100%;
+  flex: 1;
   border: none;
   color: #fff;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
 }
 
-#containerPopUpDelete {
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  z-index: 100;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-#containerPopUpDelete form {
-  background-color: white;
-  position: relative;
-  top: 10%;
+.confirmDelete:hover {
+  background-color: #FF3333;
 }
 
 /* Media Queries */

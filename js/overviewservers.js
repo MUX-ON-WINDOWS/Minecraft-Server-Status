@@ -1,11 +1,11 @@
 function addServer() {
     const showPopUp = document.getElementById("containerPopUp");
-    showPopUp.style.display = "block";
+    showPopUp.style.display = "flex";
 }
 
 function overviewServer(serverUrl, serverIp, serverPort) {
     const showPopUp = document.getElementById("containerPopUpServer");
-    showPopUp.style.display = "block";
+    showPopUp.style.display = "flex";
     checkServerStatus(serverUrl, serverIp, serverPort);
 }
 
