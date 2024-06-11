@@ -6,7 +6,7 @@ require_once 'connection.php';
 $errormessageuser = "";
 $errormessagepass = "";
 
-if(isset($_POST['sign-btn'])) {
+if (isset($_POST['sign-btn'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $repeatpassword = trim($_POST['repeatpassword']);
@@ -60,20 +60,20 @@ if(isset($_POST['sign-btn'])) {
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br><br>
             <!-- Error Message for Username -->
-            <?php if(!empty($errormessageuser)): ?>
+            <?php if (!empty($errormessageuser)) : ?>
                 <p style="color: red;"><?php echo $errormessageuser; ?></p>
             <?php endif; ?>
-            
+
             <!-- Password Fields -->
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br><br>
             <label for="password">Repeat Password:</label>
             <input type="password" id="repeatpassword" name="repeatpassword" required><br><br>
             <!-- Error Message for Passwords -->
-            <?php if(!empty($errormessagepass)): ?>
+            <?php if (!empty($errormessagepass)) : ?>
                 <p style="color: red;"><?php echo $errormessagepass; ?></p>
             <?php endif; ?>
-            
+
             <!-- Submit Button -->
             <input type="submit" value="Sign up" name="sign-btn">
         </form>

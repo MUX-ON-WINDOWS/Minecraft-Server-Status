@@ -8,7 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $serverUrl = $_POST['server_url'];
 
         // Function to delete server from the database
-        function deleteServer($serverName, $serverIp, $serverPort, $serverUrl) {
+        function deleteServer($serverName, $serverIp, $serverPort, $serverUrl)
+        {
             require 'connection.php'; // Assuming this file contains your database connection
 
             $sql = "DELETE FROM `mc_server` WHERE `server_name` = ? AND `server_ip` = ? AND `server_port` = ? AND `url` = ?";
@@ -34,4 +35,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     echo "Invalid request method.";
 }
-?>

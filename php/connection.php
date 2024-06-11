@@ -1,14 +1,4 @@
 <?php 
-// Database connection
-// $host = "rdbms.strato.de";
-// $username = "dbu508350";
-// $password = "Maxieboy16!";
-// $database = "dbs12796139";
-
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "dbs12796139";
 
 $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_error) { 

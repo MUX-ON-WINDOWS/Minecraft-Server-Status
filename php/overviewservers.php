@@ -9,7 +9,7 @@ require_once 'overview.php';
 require_once 'deleteserver.php';
 
 if (!isset($_SESSION["username"]) && !isset($_SESSION["server_id"])) {
-    header("Location: ../index.html");
+    header("Location: ../index.php");
     exit;
 } else {
     // Fetch data from database

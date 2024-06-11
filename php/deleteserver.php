@@ -16,10 +16,9 @@
         var serverPort = document.getElementById('deleteServerForm').getAttribute('data-server-port');
         var serverUrl = document.getElementById('deleteServerForm').getAttribute('data-server-url');
 
-
         // Send an AJAX request to delete the server
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
+        xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 console.log(this.responseText);
                 // Optionally, you can handle the response here
@@ -33,6 +32,7 @@
         location.reload();
     }
 </script>
+
 <body>
     <div id="containerPopUpDelete">
         <form id="deleteServerForm" action="#" method="post">

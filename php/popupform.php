@@ -8,7 +8,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if(isset($_SESSION['username'])) {
+if (isset($_SESSION['username'])) {
     $user = $_SESSION['username'];
 
     $sql = "SELECT * FROM `minecraftloginserver` WHERE `server_id_user` AND `username` = ?";
@@ -27,8 +27,8 @@ if(isset($_SESSION['username'])) {
         $row = $result->fetch_assoc();
         $_SESSION['server_id_user'] = $row['server_id_user'];
         $id = $_SESSION['server_id_user'];
-    } 
-    
+    }
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $server_name = $_POST['server_name'];
         $server_ip = $_POST['server_ip'];
@@ -36,7 +36,7 @@ if(isset($_SESSION['username'])) {
         $server_url = $_POST['server_url'];
 
         // Check if user_id is set
-        if(isset($_SESSION['server_id_user'])) {
+        if (isset($_SESSION['server_id_user'])) {
             // Prepare and bind SQL statement to prevent SQL injection
             $id = $_SESSION['server_id_user'];
 
@@ -47,7 +47,7 @@ if(isset($_SESSION['username'])) {
             // Execute the statement
             if ($stmt->execute()) {
                 // TODO Success popup message function. Redirect to overview page
-                
+
                 header("location: overviewservers.php");
                 exit();
             } else {
@@ -75,20 +75,20 @@ if(isset($_SESSION['username'])) {
             <a class="buttonClose" href="javascript:void(0)" onclick="document.getElementById('containerPopUp').style.display='none'">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>  
+                </svg>
             </a>
             <label for="server_name">Server Name:</label><br>
             <input type="text" id="server_name" name="server_name"><br><br>
-            
+
             <label for="server_ip">Server IP:</label><br>
             <input type="text" id="server_ip" name="server_ip"><br><br>
-            
+
             <label for="server_port">Server Port:</label><br>
             <input type="text" id="server_port" name="server_port"><br><br>
-            
+
             <label for="server_url">Server URL:</label><br>
             <input type="text" id="server_url" name="server_url"><br><br>
-            
+
             <input class="submitButton" type="submit" value="Add server">
         </form>
     </div>
