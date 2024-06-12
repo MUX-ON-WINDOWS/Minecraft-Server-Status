@@ -28,7 +28,7 @@
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("server_name=" + serverName + "&server_ip=" + serverIp + "&server_port=" + serverPort + "&server_url=" + serverUrl);
 
-        document.getElementById('containerPopUpDelete').style.display = 'none';
+        document.getElementById('containerPopUpDelete').style.display = 'flex';
         location.reload();
     }
 </script>
